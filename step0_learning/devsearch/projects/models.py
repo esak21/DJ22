@@ -1,10 +1,13 @@
 from email.policy import default
 import uuid
 from django.db import models
-
+from users.models import Profile
 # Create your models here.
 
 class Project(models.Model):
+    # we setup a ManytoOne relationship betwwen projects and Profile
+    # a user can create multiple Projects
+    owner = models.ForeignKey(Profile, null=True, blank=True, on_delete=models.SET_NULL)
     id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
     # primary_key make this column as primary in database 
     # editable False which makes user can't touch in Form 

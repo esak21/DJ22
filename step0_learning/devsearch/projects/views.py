@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 from django.http import HttpResponse
 import pandas as pd
@@ -38,6 +38,7 @@ from .models import Project, Tag, Review, ProjecDetails
 
 from .forms import ProjectForm
 
+@login_required(login_url='login')
 def deleteProject(request,pk):
     proj_obj = Project.objects.get(id=pk)
     if request.method =="POST":
@@ -46,6 +47,7 @@ def deleteProject(request,pk):
     context ={'object': proj_obj}
     return render(request, 'projects/delete_template.html', context)
 
+@login_required(login_url='login')
 def updateProject(request, pk):
     proj_obj = Project.objects.get(id=pk)
 
@@ -59,7 +61,8 @@ def updateProject(request, pk):
             return redirect('projects')
     context = {'form': form}
     return render ( request, 'projects/project_form.html', context)
-
+# if the user tries to navigate to add projects Page and of they are not logged in , website redirects them to the login page 
+@login_required(login_url='login')
 def createProject(request):
     form = ProjectForm()
     context = {'form': form}
